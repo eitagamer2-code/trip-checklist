@@ -850,27 +850,32 @@ button { touch-action: manipulation; }
   .trip-date-range-separator { font-size: 13px; }
 }
 
-/* 旅行日程のひとまとまりをフォーム中央に配置 */
+/* 日付入力欄だけ中央に配置し、見出しと例は左揃え */
 .trip-date-range {
-  justify-self: center;
+  justify-self: stretch;
   width: 100%;
-  max-width: 520px;
+  max-width: none;
 }
-.trip-date-range legend {
-  text-align: center;
+.trip-date-range legend,
+.trip-date-range-hint {
+  text-align: left;
 }
 .trip-date-range-controls {
+  width: 100%;
+  max-width: 520px;
   margin-inline: auto;
-}
-.trip-date-range-hint {
-  text-align: center;
 }
 @media (max-width: 760px) {
   .trip-date-range {
     grid-column: 1 / -1;
     width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+  .trip-date-range-controls {
+    width: 100%;
     max-width: 520px;
-    justify-self: center;
+    margin-inline: auto;
   }
 }
 </style>
