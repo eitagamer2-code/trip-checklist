@@ -694,6 +694,76 @@ button { touch-action: manipulation; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
+
+
+/* Mobile-fit expense date control */
+#expenseForm .form-row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+#expenseForm .expense-date-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#expenseForm #expDate {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 46px;
+  margin: 0;
+  padding: 10px 8px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.25;
+  border: 1px solid #DCD2C0;
+  border-radius: 13px;
+  background-color: #FFFCF5;
+  color: #26372D;
+}
+#expenseForm #expDate::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.25em;
+}
+#expenseForm #expDate::-webkit-calendar-picker-indicator {
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 760px) {
+  #expenseForm .form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  #expenseForm .form-row > *,
+  #expenseForm .expense-date-field,
+  #expenseForm #expCategory,
+  #expenseForm #expDate {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  #expenseForm #expDate {
+    min-height: 48px;
+    padding-left: 10px;
+    padding-right: 6px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 360px) {
+  #expenseForm #expDate {
+    padding-left: 7px;
+    padding-right: 4px;
+    letter-spacing: -0.02em;
+  }
+}
+
 </style>
 </head>
 <body>
