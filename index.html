@@ -900,15 +900,8 @@ button { touch-action: manipulation; }
    <div class="form-grid">
     <label>旅行名<input class="field" id="tripName" placeholder="例：四国 2泊3日旅行" required maxlength="80"></label>
     <label>行き先<input class="field" id="tripDestination" placeholder="例：香川・愛媛"></label>
-    <fieldset class="trip-date-range">
-     <legend>旅行日程</legend>
-     <div class="trip-date-range-controls">
-      <input class="field" id="tripStart" type="date" aria-label="出発日">
-      <span class="trip-date-range-separator" aria-hidden="true">〜</span>
-      <input class="field" id="tripEnd" type="date" aria-label="帰宅日">
-     </div>
-     <div class="trip-date-range-hint">出発日〜帰宅日（例：9/20〜9/22）</div>
-    </fieldset>
+    <label>出発日<input class="field" id="tripStart" type="date"></label>
+    <label>帰宅日<input class="field" id="tripEnd" type="date"></label>
     <label>テンプレートから作成<select class="field" id="tripTemplate"><option value="">空のリストで作成</option></select></label>
    </div>
    <div class="modal-actions"><button type="button" class="plain" id="cancelTrip">キャンセル</button><button class="primary" type="submit">保存する</button></div>
