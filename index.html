@@ -850,6 +850,29 @@ button { touch-action: manipulation; }
   .trip-date-range-separator { font-size: 13px; }
 }
 
+/* 旅行日程のひとまとまりをフォーム中央に配置 */
+.trip-date-range {
+  justify-self: center;
+  width: 100%;
+  max-width: 520px;
+}
+.trip-date-range legend {
+  text-align: center;
+}
+.trip-date-range-controls {
+  margin-inline: auto;
+}
+.trip-date-range-hint {
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .trip-date-range {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+  }
+}
 </style>
 </head>
 <body>
