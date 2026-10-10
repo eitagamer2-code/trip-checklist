@@ -764,6 +764,70 @@ button { touch-action: manipulation; }
   }
 }
 
+
+
+/* Group departure and return dates as one travel-date field */
+.trip-date-range {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.trip-date-range legend {
+  display: block;
+  width: 100%;
+  margin: 0 0 7px;
+  padding: 0;
+  color: var(--green, #234735);
+  font-size: 14px;
+  font-weight: 700;
+}
+.trip-date-range-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #DCD2C0;
+  border-radius: 14px;
+  background: #FFFCF5;
+}
+.trip-date-range-controls .field {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 10px 5px;
+  font-size: 16px;
+  border: 1px solid #E5DDCF;
+  border-radius: 10px;
+  background: #FFFEFA;
+}
+.trip-date-range-separator {
+  color: var(--green, #234735);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.trip-date-range-hint {
+  margin-top: 6px;
+  color: var(--muted, #68756A);
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .trip-date-range { grid-column: 1 / -1; }
+  .trip-date-range-controls { gap: 5px; padding: 6px; }
+  .trip-date-range-controls .field {
+    min-height: 46px;
+    padding: 9px 3px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 360px) {
+  .trip-date-range-controls { gap: 3px; padding: 5px; }
+  .trip-date-range-controls .field { padding-left: 2px; padding-right: 2px; }
+}
+
 </style>
 </head>
 <body>
@@ -788,8 +852,15 @@ button { touch-action: manipulation; }
    <div class="form-grid">
     <label>旅行名<input class="field" id="tripName" placeholder="例：四国 2泊3日旅行" required maxlength="80"></label>
     <label>行き先<input class="field" id="tripDestination" placeholder="例：香川・愛媛"></label>
-    <label>出発日<input class="field" id="tripStart" type="date"></label>
-    <label>帰宅日<input class="field" id="tripEnd" type="date"></label>
+    <fieldset class="trip-date-range">
+     <legend>旅行日程</legend>
+     <div class="trip-date-range-controls">
+      <input class="field" id="tripStart" type="date" aria-label="出発日">
+      <span class="trip-date-range-separator" aria-hidden="true">〜</span>
+      <input class="field" id="tripEnd" type="date" aria-label="帰宅日">
+     </div>
+     <div class="trip-date-range-hint">出発日〜帰宅日（例：9/20〜9/22）</div>
+    </fieldset>
     <label>テンプレートから作成<select class="field" id="tripTemplate"><option value="">空のリストで作成</option></select></label>
    </div>
    <div class="modal-actions"><button type="button" class="plain" id="cancelTrip">キャンセル</button><button class="primary" type="submit">保存する</button></div>
