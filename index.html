@@ -302,7 +302,26 @@ function compressDiaryImage(file){
  });
 }
 
-function buildTripText(t){let lines=[t.name,`行き先：${t.destination||'未設定'}`,`日程：${dateRange(t)}`];let spent=(t.expenses||[]).reduce((s,x)=>s+(Number(x.amount)||0),0);lines.push('','【費用】',`予算：${yen(t.budget)}`,`支出合計：${yen(spent)}`,...(t.expenses||[]).map(x=>`${x.date||''} ${x.name}：${yen(x.amount)}（${x.category||'その他'}）`),'','【行きたい場所】',...(t.places||[]).map(x=>`${x.visited?'[訪問済]':'[未訪問]'} ${x.name} ${x.address||''}${x.note?' - '+x.note:''}`),'','【持ち物】',...(t.items||[]).map(x=>`${x.checked?'[✓]':'[ ]'} ${x.name}（${x.category||'その他'}）`),'','【感想】',`満足度：${t.review?.rating||0}/5`,t.review?.text||'未記入');return lines.join('\\n')}\nasync function shareTrip(t,mode){let text=mode==='schedule'?[t.name,'【行程表】',...(t.schedule||[]).map(x=>`${x.date||''} ${x.time||''} ${x.title}${x.note?' - '+x.note:''}`)].join('\n'):buildTripText(t);try{if(navigator.share)await navigator.share({title:t.name,text});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);alert('旅行情報をクリップボードにコピーしました。')}else{downloadText(text,t.name+'-旅行プラン.txt')}}catch(e){if(e.name!=='AbortError')alert('共有を開始できませんでした。管理・出力タブからPDF出力をお試しください。')}}
+function buildTripText(t){
+  const lines = [t.name, `行き先：${t.destination || '未設定'}`, `日程：${dateRange(t)}`];
+  const spent = (t.expenses || []).reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
+  lines.push('', '【費用】', `予算：${yen(t.budget)}`, `支出合計：${yen(spent)}`);
+  (t.expenses || []).forEach(x => lines.push(`${x.date || ''} ${x.name}：${yen(x.amount)}（${x.category || 'その他'}）`));
+  lines.push('', '【行きたい場所】');
+  (t.places || []).forEach(x => lines.push(`${x.visited ? '[訪問済]' : '[未訪問]'} ${x.name} ${x.address || ''}${x.note ? ' - ' + x.note : ''}`));
+  lines.push('', '【持ち物】');
+  (t.items || []).forEach(x => lines.push(`${x.checked ? '[✓]' : '[ ]'} ${x.name}（${x.category || 'その他'}）`));
+  lines.push('', '【感想】', `満足度：${t.review?.rating || 0}/5`, t.review?.text || '未記入');
+  return lines.join('\n');
+}
+async function shareTrip(t){
+  const text = buildTripText(t);
+  try {
+    if (navigator.share) await navigator.share({ title: t.name, text });
+    else if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); alert('旅行情報をクリップボードにコピーしました。'); }
+    else downloadText(text, t.name + '-旅行プラン.txt');
+  } catch (e) { if (e.name !== 'AbortError') alert('共有を開始できませんでした。管理・出力タブからPDF出力をお試しください。'); }
+}
 function downloadText(text,filename){let blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename.replace(/[\\/:*?"<>|]/g,'_')+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function exportPdf(t){let w=window.open('','_blank');if(!w){alert('ポップアップがブロックされました。ブラウザのポップアップを許可して再度お試しください。');return}let text=buildTripText(t);w.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>${esc(t.name)} - 旅行プラン</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;color:#222;line-height:1.7;padding:24px;white-space:pre-wrap}h1{font-size:22px}button{padding:10px 16px}@media print{button{display:none}body{padding:0}}</style></head><body><button onclick="window.print()">印刷 / PDFとして保存</button><h1>${esc(t.name)} - 旅行プラン</h1><div>${esc(text)}</div><script>window.onload=()=>{}<\/script></body></html>`);w.document.close()}
 
