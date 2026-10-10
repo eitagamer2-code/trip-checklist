@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#244536">
+<meta name="theme-color" content="#65CDB8">
 <meta name="description" content="旅行の日程、行程、費用、行きたい場所、持ち物、感想をまとめて管理するアプリ">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Trip Checklist | 旅行準備リスト</title>
@@ -200,6 +200,108 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 8% 0%,#e9d
 @media(min-width:761px){
   .tabs{position:static}
   .layout>aside{position:sticky;top:18px}
+}
+
+
+/* Pop & cute redesign v1: mint, cream, coral; preserve mobile layout and bottom navigation */
+:root{
+  --green:#247D70;
+  --green2:#DDF7EF;
+  --ink:#354641;
+  --muted:#788781;
+  --line:#E9E4D9;
+  --bg:#FFF9EF;
+  --white:#FFFEFA;
+  --red:#D85F67;
+  --sand:#FFE4D8;
+  --sage:#DDF7EF;
+}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse at 0% 0%,#DDF7EF 0,transparent 35%),
+    radial-gradient(ellipse at 100% 4%,#FFE4D8 0,transparent 27%);
+}
+button{border-radius:14px;transition:transform .12s,filter .12s,box-shadow .12s}
+button:active{transform:translateY(1px)}
+.app{padding-top:24px}
+.logo{
+  background:linear-gradient(145deg,#DDF7EF,#C9F0E7);
+  color:#247D70;border:1px solid #BCE8DC;border-radius:17px;
+  box-shadow:0 5px 14px #4BAE9A1C;
+}
+.brand h1{letter-spacing:-.04em;font-weight:850}
+.brand p{color:#778A82}
+.primary{
+  background:linear-gradient(135deg,#F28A83,#E96F79);
+  color:#fff;box-shadow:0 3px 0 #CB5965;
+}
+.primary:active{box-shadow:0 1px 0 #CB5965}
+.secondary{background:#DDF7EF;color:#247D70}
+.plain{background:#F3F0E7;color:#5E6F68}
+.danger{background:#FFF0EF;color:#C94F5C}
+.panel{
+  background:rgba(255,254,250,.94);border-color:#EEE5D8;border-radius:22px;
+  box-shadow:0 8px 26px #765C3C0D;
+}
+.panel h2{letter-spacing:-.025em}
+.trip-card{
+  background:#FFFEFA;border-color:#EEE5D8;border-radius:17px;
+  box-shadow:0 2px 7px #765C3C08;
+}
+.trip-card.active{
+  border-color:#7BCDBB;background:#EAF9F4;
+  box-shadow:inset 3px 0 0 #EF8582,0 3px 10px #6CC8B21A;
+}
+.mini-progress,.progress{background:#E8F0EA}
+.mini-progress span,.progress span{
+  background:linear-gradient(90deg,#61CDB7,#F28A83);
+}
+.stat{
+  background:linear-gradient(145deg,#EAF9F4,#FFF8EF);
+  border-color:#E4EEE5;border-radius:17px;
+}
+.stat-value{color:#247D70;letter-spacing:-.035em}
+.tabs{
+  background:#F1F0E8;border-color:#E8E2D5;border-radius:16px;
+}
+.tabs .tab{border-radius:12px;color:#6D7C75}
+.tabs .tab.active{
+  background:#247D70;color:#fff;box-shadow:0 3px 8px #247D7026;
+}
+.field{background:#FFFEFA;border-color:#E5E6D9;border-radius:13px}
+.field:focus{outline:3px solid #DDF7EF;border-color:#65BDAA}
+.item{background:#FFFEFA;border-color:#ECE7DC;border-radius:15px}
+.item input[type=checkbox]{accent-color:#42B9A2}
+.category{background:#E8F8F2;color:#387F72;border-radius:8px}
+.data-card,.template{background:#FFFEFA;border-color:#ECE5D9;border-radius:17px}
+.eyebrow{color:#D76D72}
+.map-link{color:#247D70}
+.modal{border:1px solid #EEE5D8;border-radius:22px;background:#FFFEFA}
+.star{color:#F1A45C}
+@media(max-width:760px){
+  body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .app{padding:calc(10px + env(safe-area-inset-top)) 10px calc(100px + env(safe-area-inset-bottom))}
+  .logo{border-radius:15px}
+  .layout>aside{background:#F9F8EF}
+  .trip-card.active{box-shadow:inset 3px 0 0 #EF8582}
+  .tabs{
+    background:rgba(255,254,250,.97);
+    border-color:#E9E1D6;
+    box-shadow:0 -7px 24px #5B6E6417;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .tabs .tab{color:#778780}
+  .tabs .tab.active{
+    background:#E2F7F0;color:#247D70;
+    box-shadow:inset 0 -2px 0 #EF8582;
+  }
+  .tab-icon{font-size:18px}
+  .tab-label{font-weight:700}
+  .item{padding:12px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
 }
 
 </style>
