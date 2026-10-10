@@ -1,4 +1,4 @@
-const CACHE = "trip-checklist-natural-date-field-size-v1";
+const CACHE = "trip-checklist-natural-all-form-mobile-v1";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {

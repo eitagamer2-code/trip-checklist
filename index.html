@@ -890,6 +890,97 @@ button { touch-action: manipulation; }
   font-size: 16px;
   line-height: 1.25;
 }
+
+/* 旅行を追加・編集するフォーム：入力欄の幅と高さを統一し、スマホ幅に収める */
+#tripModal .modal {
+  box-sizing: border-box;
+  width: min(560px, calc(100vw - 28px));
+  max-width: calc(100vw - 28px);
+  min-width: 0;
+}
+#tripModal #tripForm,
+#tripModal .form-grid,
+#tripModal .form-grid > label {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+#tripModal .form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+#tripModal .form-grid > label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 6px;
+}
+#tripModal .form-grid .field,
+#tripModal .form-grid input,
+#tripModal .form-grid select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 46px;
+  margin: 0;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.25;
+}
+#tripModal .form-grid input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#tripModal .modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#tripModal .modal-actions button {
+  box-sizing: border-box;
+  min-height: 44px;
+}
+@media (max-width: 480px) {
+  #tripModal .modal {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    padding: 16px;
+  }
+  #tripModal .form-grid {
+    gap: 10px;
+  }
+  #tripModal .form-grid .field,
+  #tripModal .form-grid input,
+  #tripModal .form-grid select {
+    min-height: 46px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  #tripModal .form-grid input[type="date"] {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  #tripModal .modal-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  #tripModal .modal-actions button {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 8px;
+  }
+}
 </style>
 </head>
 <body>
