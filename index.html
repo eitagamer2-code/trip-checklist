@@ -767,8 +767,14 @@ button { touch-action: manipulation; }
 
 
 /* Group departure and return dates as one travel-date field */
+/* 旅行日程：スマートフォンで枠や日付入力が横にはみ出さないようにする */
 .trip-date-range {
+  display: block;
   min-width: 0;
+  min-inline-size: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   border: 0;
@@ -776,6 +782,7 @@ button { touch-action: manipulation; }
 .trip-date-range legend {
   display: block;
   width: 100%;
+  box-sizing: border-box;
   margin: 0 0 7px;
   padding: 0;
   color: var(--green, #234735);
@@ -787,18 +794,23 @@ button { touch-action: manipulation; }
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 8px;
+  width: 100%;
   min-width: 0;
-  padding: 8px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
   border: 1px solid #DCD2C0;
   border-radius: 14px;
   background: #FFFCF5;
 }
 .trip-date-range-controls .field {
+  display: block;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  padding: 10px 5px;
+  margin: 0;
+  padding: 10px 2px;
   font-size: 16px;
   border: 1px solid #E5DDCF;
   border-radius: 10px;
@@ -815,17 +827,27 @@ button { touch-action: manipulation; }
   font-size: 12px;
 }
 @media (max-width: 760px) {
-  .trip-date-range { grid-column: 1 / -1; }
-  .trip-date-range-controls { gap: 5px; padding: 6px; }
+  .trip-date-range {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+  .trip-date-range-controls {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 4px;
+    padding: 5px;
+  }
   .trip-date-range-controls .field {
     min-height: 46px;
-    padding: 9px 3px;
+    min-width: 0;
+    width: 100%;
+    padding: 9px 1px;
     font-size: 16px;
   }
 }
 @media (max-width: 360px) {
-  .trip-date-range-controls { gap: 3px; padding: 5px; }
-  .trip-date-range-controls .field { padding-left: 2px; padding-right: 2px; }
+  .trip-date-range-controls { gap: 2px; padding: 4px; }
+  .trip-date-range-controls .field { padding-left: 0; padding-right: 0; }
+  .trip-date-range-separator { font-size: 13px; }
 }
 
 </style>
