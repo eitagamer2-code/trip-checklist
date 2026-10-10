@@ -767,7 +767,7 @@ button { touch-action: manipulation; }
 
 
 /* Group departure and return dates as one travel-date field */
-/* 旅行日程：外枠・日付入力欄・区切り文字の幅と位置を統一 */
+/* 旅行日程：PC・スマホ共通で外枠と日付入力欄を整列 */
 .trip-date-range {
   display: block;
   justify-self: stretch;
@@ -793,7 +793,7 @@ button { touch-action: manipulation; }
 }
 .trip-date-range-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   width: 100%;
@@ -822,7 +822,7 @@ button { touch-action: manipulation; }
 }
 .trip-date-range-separator {
   display: block;
-  width: 24px;
+  width: 28px;
   text-align: center;
   color: var(--green, #234735);
   font-size: 16px;
@@ -836,42 +836,46 @@ button { touch-action: manipulation; }
   font-size: 12px;
   text-align: left;
 }
+/* タブレット・スマホ */
 @media (max-width: 760px) {
   .trip-date-range {
     grid-column: 1 / -1;
     width: 100%;
   }
   .trip-date-range-controls {
-    grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr);
     gap: 5px;
+    width: 100%;
+    max-width: 100%;
     padding: 6px;
   }
   .trip-date-range-controls .field {
     min-height: 46px;
-    padding: 9px 2px;
+    padding: 8px 2px;
     font-size: 16px;
   }
   .trip-date-range-separator {
-    width: 20px;
+    width: 22px;
     font-size: 15px;
   }
 }
-@media (max-width: 360px) {
+/* 小さめのスマホ */
+@media (max-width: 390px) {
   .trip-date-range-controls {
-    grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
     gap: 3px;
     padding: 5px;
+    border-radius: 12px;
   }
   .trip-date-range-controls .field {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 1px;
+    padding-right: 1px;
   }
   .trip-date-range-separator {
-    width: 16px;
+    width: 18px;
     font-size: 14px;
   }
 }
-
 </style>
 </head>
 <body>
