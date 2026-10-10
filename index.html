@@ -94,6 +94,29 @@ button { touch-action: manipulation; }
   .add-row input, .add-row select, .add-row button { grid-column: 1; grid-row: auto; }
 }
 
+
+/* Date fields: prevent iOS date controls from overflowing grid cells */
+*, *::before, *::after { box-sizing: border-box; }
+.form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.form-row > .field, .form-row > label, .field[type="date"], .field[type="time"] { width: 100%; min-width: 0; max-width: 100%; }
+input[type="date"], input[type="time"] { display: block; min-width: 0; width: 100%; max-width: 100%; padding-right: 6px; font-size: 16px; }
+.photo-diary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 12px; margin-top: 14px; }
+.diary-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+.diary-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #f0f3f0; }
+.diary-card-body { padding: 11px; min-width: 0; }
+.diary-card-body p { margin: 7px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.55; }
+.diary-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; }
+.photo-preview { display: block; max-width: 100%; max-height: 240px; object-fit: contain; border-radius: 10px; margin-top: 8px; }
+@media (max-width: 760px) {
+  .form-row { grid-template-columns: minmax(0, 1fr); }
+  .form-row .wide { grid-column: auto; }
+  #schDate, #schTime, #expDate { width: 100%; min-width: 0; }
+  .photo-diary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+}
+@media (max-width: 360px) {
+  .photo-diary-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 </style>
 </head>
 <body>
@@ -141,7 +164,7 @@ const starterTemplates=[
 ];
 let data=loadData(),selectedId=data.trips[0]?.id||null,activeTab='items',filter='all',editingId=null;
 function uid(){return 'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
-function loadData(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.trips)&&Array.isArray(d.templates)){d.trips.forEach(t=>{if(!Array.isArray(t.items))t.items=[];if(!Array.isArray(t.schedule))t.schedule=[];if(!Array.isArray(t.expenses))t.expenses=[];if(!Array.isArray(t.places))t.places=[];if(!t.review)t.review={rating:0,text:''};if(typeof t.budget!=='number')t.budget=Number(t.budget)||0});return d}}catch(e){}return {trips:[],templates:starterTemplates.map(t=>({...t,items:t.items.map(([name,category])=>({id:uid(),name,category}))}))}}
+function loadData(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.trips)&&Array.isArray(d.templates)){d.trips.forEach(t=>{if(!Array.isArray(t.items))t.items=[];if(!Array.isArray(t.schedule))t.schedule=[];if(!Array.isArray(t.expenses))t.expenses=[];if(!Array.isArray(t.places))t.places=[];if(!Array.isArray(t.diary))t.diary=[];if(!t.review)t.review={rating:0,text:''};if(typeof t.budget!=='number')t.budget=Number(t.budget)||0});return d}}catch(e){}return {trips:[],templates:starterTemplates.map(t=>({...t,items:t.items.map(([name,category])=>({id:uid(),name,category}))}))}}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function progress(t){let total=t.items.length,done=t.items.filter(i=>i.checked).length;return {total,done,pct:total?Math.round(done/total*100):0}}
@@ -154,11 +177,11 @@ function renderMain(){let el=document.getElementById('mainPanel'),t=data.trips.f
  let p=progress(t);el.innerHTML=`
  <div class="detail-head"><div><div class="eyebrow">MY TRIP</div><h2>${esc(t.name)}</h2><div class="destination">📍 ${esc(t.destination||'行き先未設定')}　 ·　 ${esc(dateRange(t))}</div></div><button class="plain small" id="editTrip">編集</button></div>
  <div class="stats"><div class="stat"><div class="stat-label">準備の進捗</div><div class="stat-value">${p.pct}%</div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="stat"><div class="stat-label">チェック済み</div><div class="stat-value">${p.done}<span style="font-size:13px;font-weight:500;color:var(--muted)"> / ${p.total} 項目</span></div><div class="stat-label" style="margin-top:8px">${p.total&&p.done===p.total?'準備完了です！':`あと ${p.total-p.done} 項目`}</div></div></div>
- <div class="tabs"><button class="tab ${activeTab==='items'?'active':''}" data-tab="items">持ち物</button><button class="tab ${activeTab==='schedule'?'active':''}" data-tab="schedule">行程表</button><button class="tab ${activeTab==='budget'?'active':''}" data-tab="budget">費用</button><button class="tab ${activeTab==='places'?'active':''}" data-tab="places">行きたい場所</button><button class="tab ${activeTab==='memories'?'active':''}" data-tab="memories">感想</button><button class="tab ${activeTab==='templates'?'active':''}" data-tab="templates">テンプレート</button><button class="tab ${activeTab==='settings'?'active':''}" data-tab="settings">管理・出力</button></div>
+ <div class="tabs"><button class="tab ${activeTab==='items'?'active':''}" data-tab="items">持ち物</button><button class="tab ${activeTab==='schedule'?'active':''}" data-tab="schedule">行程表</button><button class="tab ${activeTab==='budget'?'active':''}" data-tab="budget">費用</button><button class="tab ${activeTab==='places'?'active':''}" data-tab="places">行きたい場所</button><button class="tab ${activeTab==='memories'?'active':''}" data-tab="memories">感想</button><button class="tab ${activeTab==='diary'?'active':''}" data-tab="diary">写真日記</button><button class="tab ${activeTab==='templates'?'active':''}" data-tab="templates">テンプレート</button><button class="tab ${activeTab==='settings'?'active':''}" data-tab="settings">管理・出力</button></div>
  <div id="tabContent"></div>`;
  el.querySelector('#editTrip').onclick=()=>openTripModal(t);
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderMain()});
- if(activeTab==='items')renderItems(t);else if(activeTab==='schedule')renderSchedule(t);else if(activeTab==='budget')renderBudget(t);else if(activeTab==='places')renderPlaces(t);else if(activeTab==='memories')renderMemories(t);else if(activeTab==='templates')renderTemplates(t);else renderSettings(t)}
+ if(activeTab==='items')renderItems(t);else if(activeTab==='schedule')renderSchedule(t);else if(activeTab==='budget')renderBudget(t);else if(activeTab==='places')renderPlaces(t);else if(activeTab==='memories')renderMemories(t);else if(activeTab==='diary')renderDiary(t);else if(activeTab==='templates')renderTemplates(t);else renderSettings(t)}
 function renderItems(t){let host=document.getElementById('tabContent');let cats=['すべて',...new Set(t.items.map(i=>i.category||'その他'))];
  host.innerHTML=`<form class="add-row" id="addItemForm"><input class="field" id="newItemName" placeholder="持ち物を追加（例：折りたたみ傘）" maxlength="100" required><select class="field" id="newItemCategory" style="max-width:145px">${['貴重品','電子機器','衣類','洗面・ケア','食事','キャンプ用品','その他'].map(c=>`<option>${c}</option>`).join('')}</select><button class="primary" type="submit">追加</button></form>
  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${[['all','すべて'],['todo','未準備'],['done','準備済み']].map(([v,l])=>`<button class="tab ${filter===v?'active':''}" data-filter="${v}">${l}</button>`).join('')}</div>
@@ -203,6 +226,82 @@ function renderPlaces(t){let host=document.getElementById('tabContent');t.places
  host.querySelector('#placeForm').onsubmit=e=>{e.preventDefault();t.places.push({id:uid(),name:host.querySelector('#placeName').value.trim(),type:host.querySelector('#placeType').value,address:host.querySelector('#placeAddress').value.trim(),note:host.querySelector('#placeNote').value.trim(),visited:false});save()};host.querySelectorAll('[data-visited]').forEach(b=>b.onchange=()=>{let x=t.places.find(x=>x.id===b.dataset.visited);if(x)x.visited=b.checked;save()});host.querySelectorAll('[data-placedel]').forEach(b=>b.onclick=()=>{t.places=t.places.filter(x=>x.id!==b.dataset.placedel);save()})}
 function renderMemories(t){let host=document.getElementById('tabContent');t.review=t.review||{rating:0,text:''};host.innerHTML=`<h2>旅行の感想・振り返り</h2><p class="trip-meta">旅行後の感想や、次回に活かしたいことを記録できます。</p><label style="display:block;font-size:13px;font-weight:700;margin:16px 0 8px">旅行の満足度</label><div id="ratingStars" style="display:flex;gap:3px;margin-bottom:14px">${[1,2,3,4,5].map(n=>`<button type="button" class="star" data-rate="${n}" aria-label="${n}点">${n<=Number(t.review.rating)?'★':'☆'}</button>`).join('')}</div><label style="display:grid;gap:7px;font-size:13px;font-weight:700">感想・思い出<textarea class="field" id="reviewText" rows="7" maxlength="5000" placeholder="楽しかったこと、よかった場所、次回気をつけたいことなど">${esc(t.review.text||'')}</textarea></label><button class="primary" id="saveReview" style="margin-top:12px">感想を保存</button>`;
  host.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{t.review.rating=Number(b.dataset.rate);save()});host.querySelector('#saveReview').onclick=()=>{t.review.text=host.querySelector('#reviewText').value;save();alert('感想を保存しました。')}}
+
+function renderDiary(t){
+ let host=document.getElementById('tabContent');
+ t.diary=t.diary||[];
+ host.innerHTML=`<h2>📷 写真付き旅行日記</h2>
+ <p class="trip-meta">旅行中の写真と、その日の思い出を記録できます。写真はこのブラウザ内に保存されます。</p>
+ <form id="diaryForm">
+  <div class="form-row">
+   <label style="display:grid;gap:6px;font-size:13px;font-weight:700">日付<input class="field" id="diaryDate" type="date" value="${localDate()}" required></label>
+   <label style="display:grid;gap:6px;font-size:13px;font-weight:700">場所<input class="field" id="diaryPlace" placeholder="例：道後温泉本館" maxlength="100"></label>
+  </div>
+  <label style="display:grid;gap:6px;font-size:13px;font-weight:700;margin-bottom:10px">写真（1枚）<input class="field" id="diaryPhoto" type="file" accept="image/*" capture="environment" required></label>
+  <img id="diaryPreview" class="photo-preview" alt="選択した写真のプレビュー" hidden>
+  <label style="display:grid;gap:6px;font-size:13px;font-weight:700;margin:10px 0">感想・思い出<textarea class="field" id="diaryText" rows="4" maxlength="2000" placeholder="おいしかったもの、印象に残った景色、今日の出来事など"></textarea></label>
+  <button class="primary" type="submit">＋ 写真日記を保存</button>
+ </form>
+ <h3 style="font-size:15px;margin:22px 0 8px">旅行の思い出（${t.diary.length}件）</h3>
+ <div class="photo-diary-grid">${t.diary.length?[...t.diary].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(x=>`<article class="diary-card">
+  <img src="${x.photo}" alt="${esc(x.place||'旅行の写真')}" loading="lazy">
+  <div class="diary-card-body"><div class="eyebrow">${esc(x.date||'日付未設定')}</div><h3>${esc(x.place||'場所未設定')}</h3><p>${esc(x.text||'感想は未記入です。')}</p>
+   <div class="diary-actions"><button class="plain small" data-diary-share="${x.id}">共有</button><button class="danger small" data-diary-delete="${x.id}">削除</button></div>
+  </div></article>`).join(''):'<div class="empty" style="grid-column:1/-1">まだ写真日記がありません。上から写真を追加してください。</div>'}</div>
+ <p class="notice">写真は保存容量を抑えるため自動的に縮小されます。ブラウザのデータを消去すると写真も消える場合があります。大切な写真はスマホ本体にも保存してください。</p>`;
+ const fileInput=host.querySelector('#diaryPhoto'), preview=host.querySelector('#diaryPreview');
+ fileInput.onchange=()=>{
+  const f=fileInput.files?.[0]; if(!f){preview.hidden=true;return;}
+  if(!f.type.startsWith('image/')){alert('画像ファイルを選択してください。');fileInput.value='';return;}
+  const url=URL.createObjectURL(f); preview.src=url; preview.hidden=false;
+ };
+ host.querySelector('#diaryForm').onsubmit=async e=>{
+  e.preventDefault();
+  const file=fileInput.files?.[0]; if(!file){alert('写真を選択してください。');return;}
+  try{
+   const dataUrl=await compressDiaryImage(file);
+   t.diary.push({id:uid(),date:host.querySelector('#diaryDate').value,place:host.querySelector('#diaryPlace').value.trim(),text:host.querySelector('#diaryText').value.trim(),photo:dataUrl,createdAt:Date.now()});
+   save();
+  }catch(err){alert('写真を保存できませんでした。別の写真を選ぶか、画像サイズの小さい写真でお試しください。');}
+ };
+ host.querySelectorAll('[data-diary-delete]').forEach(b=>b.onclick=()=>{
+  const entry=t.diary.find(x=>x.id===b.dataset.diaryDelete);
+  if(entry&&confirm('この写真日記を削除しますか？')){t.diary=t.diary.filter(x=>x.id!==entry.id);save();}
+ });
+ host.querySelectorAll('[data-diary-share]').forEach(b=>b.onclick=async()=>{
+  const entry=t.diary.find(x=>x.id===b.dataset.diaryShare); if(!entry)return;
+  const text=[t.name,entry.date,entry.place,entry.text].filter(Boolean).join('\\n');
+  try{
+   if(navigator.share && navigator.canShare && entry.photo.startsWith('data:')){
+    const blob=await (await fetch(entry.photo)).blob();
+    const file=new File([blob], 'travel-photo.jpg', {type:blob.type||'image/jpeg'});
+    if(navigator.canShare({files:[file]})){await navigator.share({title:entry.place||t.name,text,files:[file]});return;}
+   }
+   if(navigator.share){await navigator.share({title:entry.place||t.name,text});}
+   else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);alert('説明文をコピーしました。写真はスマホの共有機能から送ってください。');}
+   else{downloadText(text,(entry.place||'旅行の思い出')+'-日記');}
+  }catch(err){if(err.name!=='AbortError')alert('共有できませんでした。');}
+ });
+}
+function compressDiaryImage(file){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onerror=reject;
+  reader.onload=()=>{
+   const img=new Image(); img.onerror=reject;
+   img.onload=()=>{
+    const max=1280, scale=Math.min(1,max/Math.max(img.width,img.height));
+    const canvas=document.createElement('canvas'); canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+    const ctx=canvas.getContext('2d'); if(!ctx){reject(new Error('canvas unavailable'));return;}
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    resolve(canvas.toDataURL('image/jpeg',0.78));
+   };
+   img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
+
 function buildTripText(t){let lines=[t.name,`行き先：${t.destination||'未設定'}`,`日程：${dateRange(t)}`,'','【行程表】'];let sched=[...(t.schedule||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||''));lines.push(...(sched.length?sched.map(x=>`${x.date||''} ${x.time||''} ${x.title}${x.duration?'（'+x.duration+'）':''}${x.note?' - '+x.note:''}`):['予定なし']));let spent=(t.expenses||[]).reduce((s,x)=>s+(Number(x.amount)||0),0);lines.push('','【費用】',`予算：${yen(t.budget)}`,`支出合計：${yen(spent)}`,...(t.expenses||[]).map(x=>`${x.date||''} ${x.name}：${yen(x.amount)}（${x.category||'その他'}）`),'','【行きたい場所】',...(t.places||[]).map(x=>`${x.visited?'[訪問済]':'[未訪問]'} ${x.name} ${x.address||''}${x.note?' - '+x.note:''}`),'','【持ち物】',...(t.items||[]).map(x=>`${x.checked?'[✓]':'[ ]'} ${x.name}（${x.category||'その他'}）`),'','【感想】',`満足度：${t.review?.rating||0}/5`,t.review?.text||'未記入');return lines.join('\n')}
 async function shareTrip(t,mode){let text=mode==='schedule'?[t.name,'【行程表】',...(t.schedule||[]).map(x=>`${x.date||''} ${x.time||''} ${x.title}${x.note?' - '+x.note:''}`)].join('\n'):buildTripText(t);try{if(navigator.share)await navigator.share({title:t.name,text});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);alert('旅行情報をクリップボードにコピーしました。')}else{downloadText(text,t.name+'-旅行プラン.txt')}}catch(e){if(e.name!=='AbortError')alert('共有を開始できませんでした。管理・出力タブからPDF出力をお試しください。')}}
 function downloadText(text,filename){let blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename.replace(/[\\/:*?"<>|]/g,'_')+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
