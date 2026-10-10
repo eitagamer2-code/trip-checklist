@@ -767,13 +767,14 @@ button { touch-action: manipulation; }
 
 
 /* Group departure and return dates as one travel-date field */
-/* 旅行日程：スマートフォンで枠や日付入力が横にはみ出さないようにする */
+/* 旅行日程：外枠・日付入力欄・区切り文字の幅と位置を統一 */
 .trip-date-range {
   display: block;
+  justify-self: stretch;
   min-width: 0;
   min-inline-size: 0;
   width: 100%;
-  max-width: 100%;
+  max-width: none;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -788,17 +789,19 @@ button { touch-action: manipulation; }
   color: var(--green, #234735);
   font-size: 14px;
   font-weight: 700;
+  text-align: left;
 }
 .trip-date-range-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   width: 100%;
+  max-width: 520px;
   min-width: 0;
-  max-width: 100%;
   box-sizing: border-box;
-  padding: 6px;
+  margin-inline: auto;
+  padding: 8px;
   border: 1px solid #DCD2C0;
   border-radius: 14px;
   background: #FFFCF5;
@@ -810,74 +813,65 @@ button { touch-action: manipulation; }
   min-width: 0;
   max-width: 100%;
   margin: 0;
-  padding: 10px 2px;
+  padding: 10px 4px;
   font-size: 16px;
+  line-height: 1.3;
   border: 1px solid #E5DDCF;
   border-radius: 10px;
   background: #FFFEFA;
 }
 .trip-date-range-separator {
+  display: block;
+  width: 24px;
+  text-align: center;
   color: var(--green, #234735);
+  font-size: 16px;
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
 }
 .trip-date-range-hint {
   margin-top: 6px;
   color: var(--muted, #68756A);
   font-size: 12px;
+  text-align: left;
 }
 @media (max-width: 760px) {
   .trip-date-range {
     grid-column: 1 / -1;
-    justify-self: stretch;
+    width: 100%;
   }
   .trip-date-range-controls {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 4px;
-    padding: 5px;
+    grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+    gap: 5px;
+    padding: 6px;
   }
   .trip-date-range-controls .field {
     min-height: 46px;
-    min-width: 0;
-    width: 100%;
-    padding: 9px 1px;
+    padding: 9px 2px;
     font-size: 16px;
+  }
+  .trip-date-range-separator {
+    width: 20px;
+    font-size: 15px;
   }
 }
 @media (max-width: 360px) {
-  .trip-date-range-controls { gap: 2px; padding: 4px; }
-  .trip-date-range-controls .field { padding-left: 0; padding-right: 0; }
-  .trip-date-range-separator { font-size: 13px; }
+  .trip-date-range-controls {
+    grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr);
+    gap: 3px;
+    padding: 5px;
+  }
+  .trip-date-range-controls .field {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .trip-date-range-separator {
+    width: 16px;
+    font-size: 14px;
+  }
 }
 
-/* 日付入力欄だけ中央に配置し、見出しと例は左揃え */
-.trip-date-range {
-  justify-self: stretch;
-  width: 100%;
-  max-width: none;
-}
-.trip-date-range legend,
-.trip-date-range-hint {
-  text-align: left;
-}
-.trip-date-range-controls {
-  width: 100%;
-  max-width: 520px;
-  margin-inline: auto;
-}
-@media (max-width: 760px) {
-  .trip-date-range {
-    grid-column: 1 / -1;
-    width: 100%;
-    max-width: none;
-    justify-self: stretch;
-  }
-  .trip-date-range-controls {
-    width: 100%;
-    max-width: 520px;
-    margin-inline: auto;
-  }
-}
 </style>
 </head>
 <body>
