@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#247a52">
+<meta name="description" content="旅行の日程と持ち物、準備の進捗を管理するアプリ">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Trip Checklist | 旅行準備リスト</title>
+<style>
+:root{--green:#247a52;--green2:#e7f4ec;--ink:#202923;--muted:#69756e;--line:#e1e8e3;--bg:#f6f8f6;--white:#fff;--red:#b94747}
+*{box-sizing:border-box}body{margin:0;padding-bottom:env(safe-area-inset-bottom);background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650}
+.app{max-width:1120px;margin:auto;padding:24px 18px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--green2);color:var(--green);width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px}.brand h1{font-size:21px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.primary{background:var(--green);color:white}.secondary{background:var(--green2);color:var(--green)}.plain{background:#f0f3f0;color:#35433a}.danger{background:#fff0f0;color:var(--red)}.small{font-size:13px;padding:7px 10px}
+.layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 12px #173b2610}
+.panel h2{font-size:16px;margin:0 0 14px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.trip-list{display:grid;gap:10px}.trip-card{width:100%;text-align:left;background:white;border:1px solid var(--line);padding:13px;border-radius:12px;color:var(--ink)}.trip-card.active{border-color:var(--green);background:#f2faf5}.trip-name{font-weight:750;margin-bottom:5px}.trip-meta{font-size:12px;color:var(--muted)}.mini-progress{height:5px;background:#e8eee9;border-radius:9px;overflow:hidden;margin-top:10px}.mini-progress span,.progress span{display:block;height:100%;background:var(--green);border-radius:9px}
+.empty{color:var(--muted);font-size:14px;line-height:1.7;padding:14px 2px}.detail-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.eyebrow{font-size:12px;color:var(--green);font-weight:750;letter-spacing:.05em}.detail-head h2{font-size:25px;margin:5px 0}.destination{color:var(--muted);font-size:14px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.stat{background:#f7faf7;border:1px solid var(--line);border-radius:12px;padding:13px}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font-size:22px;font-weight:800;margin-top:4px}.progress{height:8px;background:#e8eee9;border-radius:9px;overflow:hidden;margin-top:10px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0}.tab{background:#f0f3f0;color:#526058}.tab.active{background:var(--green);color:#fff}
+.add-row{display:flex;gap:8px;margin-bottom:14px}.add-row input{min-width:0;flex:1}.field{width:100%;border:1px solid #d9e2db;border-radius:10px;padding:11px 12px;background:white;color:var(--ink)}.field:focus{outline:2px solid #b7dfc6;border-color:var(--green)}
+.items{display:grid;gap:8px}.item{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:11px;padding:11px 12px}.item input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);flex-shrink:0}.item-main{min-width:0;flex:1}.item-name{font-size:14px;font-weight:650;overflow-wrap:anywhere}.item.checked .item-name{text-decoration:line-through;color:#829087}.item-sub{font-size:11px;color:var(--muted);margin-top:3px}.category{font-size:11px;background:#eff4f0;border-radius:6px;padding:4px 7px;color:#53665a;white-space:nowrap}.item-delete{background:transparent;color:#8c9990;padding:4px 7px;font-size:18px}
+.template-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.template{border:1px solid var(--line);border-radius:12px;padding:13px}.template h3{font-size:14px;margin:0 0 6px}.template p{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.5}.template-actions{display:flex;gap:6px;flex-wrap:wrap}
+.notice{font-size:12px;color:var(--muted);margin-top:16px;line-height:1.6}.modal-back{position:fixed;inset:0;background:#10201677;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-back.show{display:flex}.modal{background:white;border-radius:16px;padding:22px;width:min(460px,100%);box-shadow:0 20px 70px #0002}.modal h2{margin:0 0 18px;font-size:19px}.form-grid{display:grid;gap:12px}.form-grid label{font-size:13px;font-weight:700;display:grid;gap:6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:760px){button{min-height:42px}.field{min-height:44px}.app{padding:calc(12px + env(safe-area-inset-top)) 12px 40px}.layout{grid-template-columns:1fr}.top{align-items:flex-start}.brand h1{font-size:18px}.detail-head h2{font-size:22px}.template-grid{grid-template-columns:1fr}.stats{gap:8px}.stat-value{font-size:20px}.add-row{flex-wrap:wrap}.add-row select{width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">🧳</div><div><h1>Trip Checklist</h1><p>旅行の準備を、もっとシンプルに。</p></div></div>
+ <button class="primary" id="newTripBtn">＋ 旅行を追加</button>
+</header>
+<div class="layout">
+ <aside class="panel">
+  <div class="section-head"><h2>旅行一覧</h2><span id="tripCount" class="trip-meta">0件</span></div>
+  <div class="trip-list" id="tripList"></div>
+  <p class="notice">旅行データとチェック状況は、このブラウザ内に自動保存されます。</p>
+ </aside>
+ <main class="panel" id="mainPanel"></main>
+</div>
+</div>
+<div class="modal-back" id="tripModal">
+ <div class="modal">
+  <h2 id="modalTitle">旅行を追加</h2>
+  <form id="tripForm">
+   <div class="form-grid">
+    <label>旅行名<input class="field" id="tripName" placeholder="例：四国 2泊3日旅行" required maxlength="80"></label>
+    <label>行き先<input class="field" id="tripDestination" placeholder="例：香川・愛媛"></label>
+    <label>出発日<input class="field" id="tripStart" type="date"></label>
+    <label>帰宅日<input class="field" id="tripEnd" type="date"></label>
+    <label>テンプレートから作成<select class="field" id="tripTemplate"><option value="">空のリストで作成</option></select></label>
+   </div>
+   <div class="modal-actions"><button type="button" class="plain" id="cancelTrip">キャンセル</button><button class="primary" type="submit">保存する</button></div>
+  </form>
+ </div>
+</div>
+<script>
+const KEY='trip-checklist-v1';
+const starterTemplates=[
+ {id:'tpl-domestic',name:'国内旅行の基本',items:[
+  ['財布・現金','貴重品'],['身分証明書','貴重品'],['スマートフォン','電子機器'],['充電器・ケーブル','電子機器'],['モバイルバッテリー','電子機器'],['着替え','衣類'],['下着・靴下','衣類'],['洗面用具','洗面・ケア'],['常備薬','その他'],['予約情報・チケット','貴重品'],['イヤホン','電子機器']
+ ]},
+ {id:'tpl-overseas',name:'海外旅行の基本',items:[
+  ['パスポート','貴重品'],['航空券・予約情報','貴重品'],['財布・現地通貨','貴重品'],['クレジットカード','貴重品'],['海外旅行保険情報','貴重品'],['スマートフォン','電子機器'],['変換プラグ','電子機器'],['充電器・ケーブル','電子機器'],['モバイルバッテリー','電子機器'],['着替え','衣類'],['洗面用具','洗面・ケア'],['常備薬','その他']
+ ]},
+ {id:'tpl-camp',name:'キャンプ・アウトドア',items:[
+  ['テント・ペグ','キャンプ用品'],['寝袋・マット','キャンプ用品'],['ランタン・電池','キャンプ用品'],['調理器具','キャンプ用品'],['食材・飲み物','食事'],['着替え・防寒着','衣類'],['雨具','衣類'],['タオル','洗面・ケア'],['虫よけ','洗面・ケア'],['救急セット','その他'],['モバイルバッテリー','電子機器']
+ ]}
+];
+let data=loadData(),selectedId=data.trips[0]?.id||null,activeTab='items',filter='all',editingId=null;
+function uid(){return 'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function loadData(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.trips)&&Array.isArray(d.templates))return d}catch(e){}return {trips:[],templates:starterTemplates.map(t=>({...t,items:t.items.map(([name,category])=>({id:uid(),name,category}))}))}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function progress(t){let total=t.items.length,done=t.items.filter(i=>i.checked).length;return {total,done,pct:total?Math.round(done/total*100):0}}
+function dateRange(t){if(!t.start&&!t.end)return '日程未設定';return `${t.start||'未定'} ～ ${t.end||'未定'}`}
+function render(){renderTrips();renderMain();document.getElementById('tripCount').textContent=data.trips.length+'件'}
+function renderTrips(){let el=document.getElementById('tripList');if(!data.trips.length){el.innerHTML='<div class="empty">まだ旅行がありません。<br>「旅行を追加」から最初の旅行を作成しましょう。</div>';return}
+ el.innerHTML=data.trips.map(t=>{let p=progress(t);return `<button class="trip-card ${t.id===selectedId?'active':''}" data-trip="${t.id}"><div class="trip-name">${esc(t.name)}</div><div class="trip-meta">📍 ${esc(t.destination||'行き先未設定')}</div><div class="trip-meta" style="margin-top:4px">${esc(dateRange(t))}</div><div class="mini-progress"><span style="width:${p.pct}%"></span></div><div class="trip-meta" style="margin-top:5px">準備 ${p.done}/${p.total} ・ ${p.pct}%</div></button>`}).join('');
+ el.querySelectorAll('[data-trip]').forEach(b=>b.onclick=()=>{selectedId=b.dataset.trip;activeTab='items';render()})}
+function renderMain(){let el=document.getElementById('mainPanel'),t=data.trips.find(x=>x.id===selectedId);if(!t){el.innerHTML='<div class="empty" style="padding:36px 12px;text-align:center"><div style="font-size:42px;margin-bottom:12px">🧳</div><h2 style="color:var(--ink)">次の旅行の準備を始めましょう</h2><p>旅行を追加すると、持ち物チェックリストを管理できます。</p><button class="primary" onclick="openTripModal()">＋ 旅行を追加</button></div>';return}
+ let p=progress(t);el.innerHTML=`
+ <div class="detail-head"><div><div class="eyebrow">MY TRIP</div><h2>${esc(t.name)}</h2><div class="destination">📍 ${esc(t.destination||'行き先未設定')}　 ·　 ${esc(dateRange(t))}</div></div><button class="plain small" id="editTrip">編集</button></div>
+ <div class="stats"><div class="stat"><div class="stat-label">準備の進捗</div><div class="stat-value">${p.pct}%</div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="stat"><div class="stat-label">チェック済み</div><div class="stat-value">${p.done}<span style="font-size:13px;font-weight:500;color:var(--muted)"> / ${p.total} 項目</span></div><div class="stat-label" style="margin-top:8px">${p.total&&p.done===p.total?'準備完了です！':`あと ${p.total-p.done} 項目`}</div></div></div>
+ <div class="tabs"><button class="tab ${activeTab==='items'?'active':''}" data-tab="items">持ち物リスト</button><button class="tab ${activeTab==='templates'?'active':''}" data-tab="templates">テンプレート</button><button class="tab ${activeTab==='settings'?'active':''}" data-tab="settings">旅行の管理</button></div>
+ <div id="tabContent"></div>`;
+ el.querySelector('#editTrip').onclick=()=>openTripModal(t);
+ el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderMain()});
+ if(activeTab==='items')renderItems(t);else if(activeTab==='templates')renderTemplates(t);else renderSettings(t)}
+function renderItems(t){let host=document.getElementById('tabContent');let cats=['すべて',...new Set(t.items.map(i=>i.category||'その他'))];
+ host.innerHTML=`<form class="add-row" id="addItemForm"><input class="field" id="newItemName" placeholder="持ち物を追加（例：折りたたみ傘）" maxlength="100" required><select class="field" id="newItemCategory" style="max-width:145px">${['貴重品','電子機器','衣類','洗面・ケア','食事','キャンプ用品','その他'].map(c=>`<option>${c}</option>`).join('')}</select><button class="primary" type="submit">追加</button></form>
+ <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${[['all','すべて'],['todo','未準備'],['done','準備済み']].map(([v,l])=>`<button class="tab ${filter===v?'active':''}" data-filter="${v}">${l}</button>`).join('')}</div>
+ <div class="items" id="itemList"></div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="secondary small" id="saveTemplate">このリストをテンプレートに保存</button><button class="plain small" id="exportData">データを書き出す</button></div>`;
+ host.querySelector('#addItemForm').onsubmit=e=>{e.preventDefault();let name=host.querySelector('#newItemName').value.trim();if(!name)return;t.items.push({id:uid(),name,category:host.querySelector('#newItemCategory').value,checked:false});save()};
+ host.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;renderMain()});
+ host.querySelector('#saveTemplate').onclick=()=>{let name=prompt('テンプレート名を入力してください',t.name+'の持ち物');if(!name?.trim())return;data.templates.push({id:uid(),name:name.trim(),items:t.items.map(i=>({id:uid(),name:i.name,category:i.category,checked:false}))});save();activeTab='templates';renderMain()};
+ host.querySelector('#exportData').onclick=exportData;
+ let list=host.querySelector('#itemList');let shown=t.items.filter(i=>filter==='all'||(filter==='done'?i.checked:!i.checked));
+ list.innerHTML=shown.length?shown.map(i=>`<div class="item ${i.checked?'checked':''}"><input type="checkbox" data-check="${i.id}" ${i.checked?'checked':''} aria-label="${esc(i.name)}"><div class="item-main"><div class="item-name">${esc(i.name)}</div><div class="item-sub">${esc(i.category||'その他')}</div></div><span class="category">${i.checked?'準備済み':'未準備'}</span><button class="item-delete" data-delete="${i.id}" title="削除" aria-label="削除">×</button></div>`).join(''):'<div class="empty">表示する持ち物がありません。上から追加できます。</div>';
+ list.querySelectorAll('[data-check]').forEach(c=>c.onchange=()=>{let item=t.items.find(i=>i.id===c.dataset.check);if(item)item.checked=c.checked;save()});
+ list.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{let item=t.items.find(i=>i.id===b.dataset.delete);if(item&&confirm(`「${item.name}」を削除しますか？`)){t.items=t.items.filter(i=>i.id!==b.dataset.delete);save()}});
+}
+function renderTemplates(t){let host=document.getElementById('tabContent');host.innerHTML=`<div class="section-head"><div><h2 style="margin:0 0 4px">保存済みテンプレート</h2><div class="trip-meta">テンプレートを使って持ち物をまとめて追加できます。</div></div></div><div class="template-grid">${data.templates.map(tp=>`<div class="template"><h3>${esc(tp.name)}</h3><p>${tp.items.length}項目 · ${esc(tp.items.slice(0,4).map(i=>i.name).join('、'))}${tp.items.length>4?' ほか':''}</p><div class="template-actions"><button class="secondary small" data-apply="${tp.id}">この旅行に追加</button><button class="plain small" data-replace="${tp.id}">リストを置き換え</button><button class="plain small" data-save="${tp.id}">更新</button><button class="danger small" data-remove="${tp.id}">削除</button></div></div>`).join('')}</div><p class="notice">「追加」は既存の持ち物を残して項目を加えます。「置き換え」は現在のリストを消してから適用します。</p>`;
+ host.querySelectorAll('[data-apply]').forEach(b=>b.onclick=()=>{let tp=data.templates.find(x=>x.id===b.dataset.apply);if(tp){t.items.push(...tp.items.map(i=>({id:uid(),name:i.name,category:i.category,checked:false})));save();activeTab='items';renderMain()}});
+ host.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>{let tp=data.templates.find(x=>x.id===b.dataset.replace);if(tp&&confirm('現在の持ち物リストを置き換えますか？')){t.items=tp.items.map(i=>({id:uid(),name:i.name,category:i.category,checked:false}));save();activeTab='items';renderMain()}});
+ host.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{let tp=data.templates.find(x=>x.id===b.dataset.save);if(tp&&confirm(`「${tp.name}」を現在の持ち物リストで更新しますか？`)){tp.items=t.items.map(i=>({id:uid(),name:i.name,category:i.category,checked:false}));save();renderMain()}});
+ host.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{let tp=data.templates.find(x=>x.id===b.dataset.remove);if(tp&&confirm(`テンプレート「${tp.name}」を削除しますか？`)){data.templates=data.templates.filter(x=>x.id!==tp.id);save()}});
+}
+function renderSettings(t){let host=document.getElementById('tabContent');host.innerHTML=`<h2>旅行の管理</h2><p class="trip-meta">旅行名・行き先・日程を変更できます。</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="secondary" id="editSettings">旅行情報を編集</button><button class="plain" id="duplicateTrip">この旅行を複製</button><button class="danger" id="deleteTrip">この旅行を削除</button></div><p class="notice">旅行を削除すると、その旅行の持ち物とチェック状況も削除されます。</p>`;
+ host.querySelector('#editSettings').onclick=()=>openTripModal(t);
+ host.querySelector('#duplicateTrip').onclick=()=>{let copy={...t,id:uid(),name:t.name+'（コピー）',items:t.items.map(i=>({...i,id:uid(),checked:false}))};data.trips.push(copy);selectedId=copy.id;save()};
+ host.querySelector('#deleteTrip').onclick=()=>{if(confirm(`旅行「${t.name}」を削除しますか？`)){data.trips=data.trips.filter(x=>x.id!==t.id);selectedId=data.trips[0]?.id||null;activeTab='items';save()}};
+}
+function openTripModal(t=null){editingId=t?.id||null;document.getElementById('modalTitle').textContent=t?'旅行を編集':'旅行を追加';document.getElementById('tripName').value=t?.name||'';document.getElementById('tripDestination').value=t?.destination||'';document.getElementById('tripStart').value=t?.start||'';document.getElementById('tripEnd').value=t?.end||'';let sel=document.getElementById('tripTemplate');sel.innerHTML='<option value="">空のリストで作成</option>'+data.templates.map(tp=>`<option value="${tp.id}">${esc(tp.name)}</option>`).join('');sel.disabled=!!t;document.getElementById('tripModal').classList.add('show');if(!t)sel.value=''}
+document.getElementById('newTripBtn').onclick=()=>openTripModal();
+document.getElementById('cancelTrip').onclick=()=>document.getElementById('tripModal').classList.remove('show');
+document.getElementById('tripModal').onclick=e=>{if(e.target.id==='tripModal')e.currentTarget.classList.remove('show')};
+document.getElementById('tripForm').onsubmit=e=>{e.preventDefault();let name=document.getElementById('tripName').value.trim();if(!name)return;let obj={name,destination:document.getElementById('tripDestination').value.trim(),start:document.getElementById('tripStart').value,end:document.getElementById('tripEnd').value};if(obj.start&&obj.end&&obj.end<obj.start){alert('帰宅日は出発日以降の日付にしてください。');return}
+ if(editingId){Object.assign(data.trips.find(x=>x.id===editingId),obj)}else{let tp=data.templates.find(x=>x.id===document.getElementById('tripTemplate').value);let trip={id:uid(),...obj,items:tp?tp.items.map(i=>({id:uid(),name:i.name,category:i.category,checked:false})):[]};data.trips.push(trip);selectedId=trip.id;activeTab='items';filter='all'}
+ document.getElementById('tripModal').classList.remove('show');save()};
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='trip-checklist-backup.json';a.click();URL.revokeObjectURL(url)}
+render();
+</script>
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }
+</script>
+</body>
+</html>

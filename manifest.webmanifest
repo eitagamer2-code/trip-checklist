@@ -1,0 +1,11 @@
+{
+  "name": "Trip Checklist - 旅行準備リスト",
+  "short_name": "Trip Checklist",
+  "description": "旅行の日程、持ち物、準備進捗を管理",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8f6",
+  "theme_color": "#247a52",
+  "icons": []
+}
