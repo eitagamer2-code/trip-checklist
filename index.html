@@ -631,7 +631,97 @@ async function shareTrip(t){
   } catch (e) { if (e.name !== 'AbortError') alert('共有を開始できませんでした。管理・出力タブからPDF出力をお試しください。'); }
 }
 function downloadText(text,filename){let blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename.replace(/[\\/:*?"<>|]/g,'_')+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function exportPdf(t){let w=window.open('','_blank');if(!w){alert('ポップアップがブロックされました。ブラウザのポップアップを許可して再度お試しください。');return}let text=buildTripText(t);w.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>${esc(t.name)} - 旅行プラン</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;color:#222;line-height:1.7;padding:24px;white-space:pre-wrap}h1{font-size:22px}button{padding:10px 16px}@media print{button{display:none}body{padding:0}}</style></head><body><button onclick="window.print()">印刷 / PDFとして保存</button><h1>${esc(t.name)} - 旅行プラン</h1><div>${esc(text)}</div><script>window.onload=()=>{}<\/script></body></html>`);w.document.close()}
+function exportPdf(t){let w=window.open('','_blank');if(!w){alert('ポップアップがブロックされました。ブラウザのポップアップを許可して再度お試しください。');return}let text=buildTripText(t);w.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>${esc(t.name)} - 旅行プラン</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;color:#222;line-height:1.7;padding:24px;white-space:pre-wrap}h1{font-size:22px}button{padding:10px 16px}@media print{button{display:none}body{padding:0}}
+
+/* Sage green x ivory theme override */
+:root {
+  --sage: #A8BDA0;
+  --ivory: #F8F5EA;
+  --deep-green: #496653;
+  --sage-soft: #E4EBDD;
+  --sage-pale: #F0F3E9;
+  --coral: #D99A9B;
+  --text: #34463A;
+  --muted: #667568;
+  --line: #D7DFD0;
+  --bg: #F8F5EA;
+  --card: #FFFEFA;
+  --primary: #496653;
+  --primary-dark: #344D3C;
+}
+html, body {
+  background: var(--ivory) !important;
+  color: var(--text);
+}
+body {
+  background-image:
+    radial-gradient(circle at 8% 4%, rgba(168,189,160,.20), transparent 28%),
+    radial-gradient(circle at 94% 16%, rgba(217,154,155,.10), transparent 24%);
+}
+header, .header, .app-header, .topbar {
+  background: linear-gradient(135deg, #A8BDA0, #DCE7D6) !important;
+  color: #344D3C !important;
+  border-color: #A8BDA0 !important;
+}
+.card, .panel, .modal, .dialog, .section-card, .trip-card {
+  border-color: var(--line);
+}
+button, .btn, input[type="button"], input[type="submit"] {
+  border-radius: 16px;
+}
+button.primary, .btn-primary, .primary, input[type="submit"] {
+  background: var(--deep-green) !important;
+  border-color: var(--deep-green) !important;
+  color: #fff !important;
+}
+button.secondary, .btn-secondary {
+  background: var(--sage-soft) !important;
+  border-color: #C7D4C0 !important;
+  color: var(--deep-green) !important;
+}
+.tabs, nav.tabs {
+  background: rgba(248,245,234,.97) !important;
+  border-top: 1px solid #D7DFD0 !important;
+  backdrop-filter: blur(12px);
+}
+.tabs button, nav.tabs button {
+  color: #667568 !important;
+}
+.tabs button.active, nav.tabs button.active, .tabs button[aria-selected="true"] {
+  color: var(--deep-green) !important;
+  background: #E4EBDD !important;
+}
+input, select, textarea {
+  border-color: #C7D4C0 !important;
+  background-color: #FFFEFA !important;
+  color: #34463A !important;
+  border-radius: 13px !important;
+}
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: 3px solid rgba(73,102,83,.28) !important;
+  outline-offset: 2px;
+}
+.badge, .tag, .chip, .pill {
+  background: #E4EBDD;
+  color: #496653;
+  border-radius: 999px;
+}
+.progress, progress {
+  accent-color: #496653;
+}
+hr, .divider {
+  border-color: #D7DFD0 !important;
+}
+@media (max-width: 700px) {
+  body {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+  .tabs, nav.tabs {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+</style></head><body><button onclick="window.print()">印刷 / PDFとして保存</button><h1>${esc(t.name)} - 旅行プラン</h1><div>${esc(text)}</div><script>window.onload=()=>{}<\/script></body></html>`);w.document.close()}
 
 render();
 </script>
