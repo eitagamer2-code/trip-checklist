@@ -1,4 +1,4 @@
-const CACHE = "trip-checklist-sage-datefield-v1";
+const CACHE = "trip-checklist-natural-travel-v1";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
