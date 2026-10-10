@@ -304,6 +304,127 @@ button:active{transform:translateY(1px)}
   *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
 }
 
+
+/* Usability-first refinement: larger touch targets, clearer contrast, safer mobile spacing */
+:root{
+  --green:#176B5D;
+  --green2:#DDF7EF;
+  --ink:#293D37;
+  --muted:#5F716A;
+  --line:#E3DED3;
+  --bg:#FFF9EF;
+  --white:#FFFEFA;
+  --red:#C94F5C;
+  --sand:#FFE4D8;
+  --sage:#DDF7EF;
+}
+html{scroll-padding-top:16px;scroll-padding-bottom:110px}
+body{
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+button,input,select,textarea{font:inherit}
+button,.tab,.trip-card,label[for],input[type="checkbox"]{touch-action:manipulation}
+button{
+  min-height:44px;
+  padding:10px 14px;
+  font-weight:650;
+}
+button:focus-visible,.tab:focus-visible,.field:focus-visible,
+input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid #247D70;
+  outline-offset:3px;
+}
+.panel{padding:16px}
+.panel h2{font-size:1.15rem;line-height:1.35}
+.brand h1{font-size:1.45rem;line-height:1.2}
+.brand p{font-size:.9rem}
+.trip-card{min-height:56px;padding:12px}
+.tabs .tab{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:6px 3px;
+  font-size:12px;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
+.field{
+  min-height:46px;
+  padding:10px 12px;
+  font-size:16px;
+}
+.item{min-height:54px;padding:12px}
+.item input[type="checkbox"]{
+  width:22px;height:22px;min-width:22px;
+}
+.stat{padding:14px}
+.stat-value{font-size:1.35rem}
+.muted,.hint,.small,.eyebrow{line-height:1.45}
+@media(max-width:760px){
+  body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .app{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    padding:calc(8px + env(safe-area-inset-top)) 10px calc(112px + env(safe-area-inset-bottom));
+  }
+  .layout{min-width:0;grid-template-columns:minmax(0,1fr)}
+  .layout>*,.panel,.content,.main{min-width:0;max-width:100%;box-sizing:border-box}
+  .panel{padding:14px;border-radius:18px}
+  .tabs{
+    position:fixed;
+    z-index:1000;
+    left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));
+    width:auto;
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:2px;
+    padding:5px;
+    box-sizing:border-box;
+    border-radius:18px;
+    background:rgba(255,254,250,.98);
+    border:1px solid #E5DED2;
+    box-shadow:0 5px 22px rgba(46,73,62,.18);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+  .tabs .tab{
+    min-width:0;
+    min-height:52px;
+    padding:5px 1px;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:750;
+    white-space:normal;
+    word-break:keep-all;
+  }
+  .tab-icon{font-size:18px;line-height:1.1}
+  .tab-label{font-size:10px;line-height:1.15}
+  .tabs .tab.active{background:#DDF7EF;color:#176B5D;box-shadow:inset 0 -2px 0 #E8787A}
+  .trip-list,.trip-cards{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+  input,select,textarea{max-width:100%;box-sizing:border-box}
+  .row,.form-row{flex-wrap:wrap}
+  .field{width:100%;max-width:100%}
+  .item{gap:10px}
+  .item *{min-width:0}
+  .primary,.secondary,.plain,.danger{min-height:46px}
+}
+@media(max-width:360px){
+  .app{padding-left:8px;padding-right:8px}
+  .tabs{left:5px;right:5px;gap:1px;padding:4px}
+  .tabs .tab{font-size:10px}
+  .tab-label{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 <body>

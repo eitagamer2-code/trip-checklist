@@ -1,4 +1,4 @@
-const CACHE = "trip-checklist-pop-v1";
+const CACHE = "trip-checklist-pop-usability-v1";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
