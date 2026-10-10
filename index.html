@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#247a52">
+<meta name="theme-color" content="#244536">
 <meta name="description" content="旅行の日程、行程、費用、行きたい場所、持ち物、感想をまとめて管理するアプリ">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Trip Checklist | 旅行準備リスト</title>
 <style>
-:root{--green:#247a52;--green2:#e7f4ec;--ink:#202923;--muted:#69756e;--line:#e1e8e3;--bg:#f6f8f6;--white:#fff;--red:#b94747}
+:root{--green:#244536;--green2:#e7ece3;--ink:#25342b;--muted:#70786d;--line:#e7e0d3;--bg:#f6f2e9;--white:#fffdf8;--red:#b94747;--sand:#e9dfce;--sage:#dfe7d9}
 *{box-sizing:border-box}body{margin:0;padding-bottom:env(safe-area-inset-bottom);background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
 button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650}
 .app{max-width:1120px;margin:auto;padding:24px 18px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
@@ -117,6 +117,91 @@ input[type="date"], input[type="time"] { display: block; min-width: 0; width: 10
   .photo-diary-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
+
+/* Natural travel redesign v1: warm paper, deep forest green, mobile bottom navigation */
+body{background:var(--bg);background-image:radial-gradient(ellipse at 8% 0%,#e9dfce55 0,transparent 38%);}
+.app{padding-top:28px;padding-bottom:56px}
+.top{margin-bottom:22px;align-items:center}
+.logo{background:var(--sage);color:var(--green);border:1px solid #d1dccb;border-radius:16px;box-shadow:0 4px 12px #2445360b}
+.brand h1{letter-spacing:-.035em;font-size:22px}
+.brand p{letter-spacing:.015em}
+.primary{background:var(--green);box-shadow:0 3px 0 #183326;transition:transform .12s,box-shadow .12s}
+.primary:active{transform:translateY(2px);box-shadow:0 1px 0 #183326}
+.secondary{background:var(--sage);color:var(--green)}
+.plain{background:#f1ece2;color:#4f5c50}
+.panel{border-color:var(--line);border-radius:20px;box-shadow:0 8px 28px #3b35230b}
+.panel h2{letter-spacing:-.02em}
+.trip-card{background:#fffdf8;border-color:#e8e0d2;border-radius:15px;transition:border-color .15s,background .15s}
+.trip-card.active{border-color:#6b856b;background:#f0f3e9;box-shadow:inset 3px 0 0 var(--green)}
+.mini-progress,.progress{background:#e9e4d9}
+.mini-progress span,.progress span{background:linear-gradient(90deg,#315a43,#7f9873)}
+.stat{background:linear-gradient(145deg,#f4f3e9,#fbf8f0);border-color:#e8e1d4;border-radius:15px}
+.stat-value{letter-spacing:-.035em;color:var(--green)}
+.tabs{gap:6px;padding:5px;background:#eee8dc;border:1px solid #e4dccd;border-radius:15px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .tab{border-radius:11px;background:transparent;color:#5d685d;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;transition:background .15s,color .15s}
+.tabs .tab.active{background:var(--green);color:#fffdf8;box-shadow:0 3px 8px #24453625}
+.tab-icon{font-size:15px;font-weight:800;line-height:1;min-width:16px;text-align:center}
+.tab-label{font-size:13px}
+.field{border-color:#ded7c9;background:#fffefa;border-radius:12px}
+.field:focus{outline:3px solid #d9e3d2;border-color:#6b856b}
+.item{background:#fffdf8;border-color:#e9e2d7;border-radius:13px;padding:13px}
+.item input[type=checkbox]{width:21px;height:21px}
+.category{background:#f0ede3;color:#5b695b}
+.data-card,.template{background:#fffdf8;border-color:#e8e0d2;border-radius:15px}
+.notice{color:#797d70}
+.eyebrow{color:#557357}
+.map-link{color:#315a43}
+.modal{border:1px solid var(--line);border-radius:20px;background:#fffdf8}
+
+@media(max-width:760px){
+  body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+  .app{padding:calc(10px + env(safe-area-inset-top)) 10px calc(96px + env(safe-area-inset-bottom));}
+  .top{flex-direction:row;align-items:center;gap:10px;margin-bottom:13px}
+  .brand{gap:9px;flex:1}
+  .logo{width:40px;height:40px;font-size:21px;flex-shrink:0}
+  .brand h1{font-size:18px}
+  .brand p{font-size:11px}
+  #newTripBtn{width:auto;min-height:42px;padding:9px 12px;white-space:nowrap;font-size:13px}
+  .layout{gap:11px}
+  .layout>aside{padding:12px 12px 10px;border-radius:17px}
+  .layout>aside .section-head{margin-bottom:9px}
+  .layout>aside .section-head h2{font-size:14px;margin:0}
+  .trip-list{display:flex;gap:9px;overflow-x:auto;padding:1px 1px 5px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .trip-card{flex:0 0 min(76vw,255px);scroll-snap-align:start;padding:11px 12px}
+  .layout>aside .notice{display:none}
+  .panel{padding:13px;border-radius:17px}
+  #mainPanel{min-height:320px}
+  .detail-head h2{font-size:21px}
+  .stats{margin:13px 0}
+  .stat{padding:11px 10px}
+  .tabs{position:fixed;z-index:10;left:0;right:0;bottom:0;margin:0;padding:7px 5px calc(7px + env(safe-area-inset-bottom));width:100%;max-width:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;border-radius:16px 16px 0 0;border:1px solid #e0d8c9;border-bottom:0;background:#fffdf8;box-shadow:0 -7px 24px #2c352515;overflow:visible}
+  .tabs .tab{min-width:0;min-height:54px;display:flex;flex-direction:column;gap:4px;padding:5px 1px;border-radius:10px;white-space:normal;flex:initial;color:#657064}
+  .tabs .tab.active{background:#e7ece3;color:var(--green);box-shadow:inset 0 -2px 0 var(--green)}
+  .tab-icon{font-size:17px;line-height:19px}
+  .tab-label{font-size:10px;line-height:1.15;white-space:nowrap;letter-spacing:-.04em}
+  .tabs .tab[aria-label="管理・出力"] .tab-icon{letter-spacing:-2px}
+  .add-row{grid-template-columns:minmax(0,1fr) auto}
+  .add-row input{grid-column:1/-1}
+  .add-row select{grid-column:1;grid-row:2}
+  .add-row button{grid-column:2;grid-row:2}
+  .item{padding:11px 10px}
+  .section-head{align-items:flex-start}
+}
+@media(max-width:360px){
+  .app{padding-left:7px;padding-right:7px}
+  .brand h1{font-size:16px}
+  .brand p{font-size:10px}
+  #newTripBtn{padding:8px 9px;font-size:12px}
+  .tabs{padding-left:3px;padding-right:3px}
+  .tab-label{font-size:9px}
+  .tabs .tab{min-height:52px}
+}
+@media(min-width:761px){
+  .tabs{position:static}
+  .layout>aside{position:sticky;top:18px}
+}
+
 </style>
 </head>
 <body>
@@ -177,7 +262,7 @@ function renderMain(){let el=document.getElementById('mainPanel'),t=data.trips.f
  let p=progress(t);el.innerHTML=`
  <div class="detail-head"><div><div class="eyebrow">MY TRIP</div><h2>${esc(t.name)}</h2><div class="destination">📍 ${esc(t.destination||'行き先未設定')}　 ·　 ${esc(dateRange(t))}</div></div><button class="plain small" id="editTrip">編集</button></div>
  <div class="stats"><div class="stat"><div class="stat-label">準備の進捗</div><div class="stat-value">${p.pct}%</div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="stat"><div class="stat-label">チェック済み</div><div class="stat-value">${p.done}<span style="font-size:13px;font-weight:500;color:var(--muted)"> / ${p.total} 項目</span></div><div class="stat-label" style="margin-top:8px">${p.total&&p.done===p.total?'準備完了です！':`あと ${p.total-p.done} 項目`}</div></div></div>
- <div class="tabs"><button class="tab ${activeTab==='items'?'active':''}" data-tab="items">持ち物</button><button class="tab ${activeTab==='budget'?'active':''}" data-tab="budget">費用</button><button class="tab ${activeTab==='places'?'active':''}" data-tab="places">行きたい場所</button><button class="tab ${activeTab==='memories'?'active':''}" data-tab="memories">感想</button><button class="tab ${activeTab==='templates'?'active':''}" data-tab="templates">テンプレート</button><button class="tab ${activeTab==='settings'?'active':''}" data-tab="settings">管理・出力</button></div>
+ <nav class="tabs" aria-label="旅行メニュー"><button class="tab ${activeTab==='items'?'active':''}" data-tab="items" aria-label="持ち物"><span class="tab-icon">✓</span><span class="tab-label">持ち物</span></button><button class="tab ${activeTab==='budget'?'active':''}" data-tab="budget" aria-label="費用"><span class="tab-icon">￥</span><span class="tab-label">費用</span></button><button class="tab ${activeTab==='places'?'active':''}" data-tab="places" aria-label="行きたい場所"><span class="tab-icon">⌖</span><span class="tab-label">場所</span></button><button class="tab ${activeTab==='memories'?'active':''}" data-tab="memories" aria-label="感想"><span class="tab-icon">♡</span><span class="tab-label">感想</span></button><button class="tab ${activeTab==='templates'?'active':''}" data-tab="templates" aria-label="テンプレート"><span class="tab-icon">▤</span><span class="tab-label">テンプレ</span></button><button class="tab ${activeTab==='settings'?'active':''}" data-tab="settings" aria-label="管理・出力"><span class="tab-icon">•••</span><span class="tab-label">管理</span></button></nav>
  <div id="tabContent"></div>`;
  el.querySelector('#editTrip').onclick=()=>openTripModal(t);
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderMain()});
